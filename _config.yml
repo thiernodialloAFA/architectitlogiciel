@@ -1,0 +1,53 @@
+title: "Architect IT Logiciel — Group IT/Software Architect Prep"
+description: >-
+  A learning path and platform proposal prepared for the Group IT/Software
+  Architect role at Pierre & Vacances Group: architecture governance,
+  application architecture and cross-domain coherence, application landscape
+  stocktake and risk prioritisation, AI architecture, and technical advisory.
+theme: minima
+
+# GitHub Pages' built-in Jekyll build already includes and permits these
+# plugins (they ship with the `github-pages` gem), so no Gemfile is needed:
+#   - jekyll-optional-front-matter: process Markdown files even without a
+#     YAML front matter block, so every existing file in this repo renders
+#     as a page without needing to be edited.
+#   - jekyll-readme-index: serve each directory's README.md as that
+#     directory's index page (e.g. /learning-path/ serves learning-path/README.md).
+#   - jekyll-relative-links: rewrite relative links between Markdown files
+#     (e.g. "01-architecture-fundamentals-c4.md") so they resolve to the
+#     correct rendered page on the built site instead of a raw .md link.
+#   - jekyll-titles-from-headings: use each page's first Markdown heading as
+#     its HTML <title>, since none of these files declare an explicit title.
+#   - jekyll-default-layout: apply the theme's default page layout to any
+#     page that doesn't declare one explicitly.
+plugins:
+  - jekyll-optional-front-matter
+  - jekyll-readme-index
+  - jekyll-relative-links
+  - jekyll-titles-from-headings
+  - jekyll-default-layout
+
+readme_index:
+  with_frontmatter: false
+
+relative_links:
+  enabled: true
+  collections: false
+
+titles_from_headings:
+  enabled: true
+  strip_title: false
+  collections: true
+
+# Shown as extra links in the minima theme's top navigation bar, alongside
+# the automatically-generated "Home" link for the root README.
+header_pages:
+  - learning-path/README.md
+  - docs/architecture-governance-platform-proposal.md
+
+# Keep the built site free of common non-content artefacts, if present.
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - node_modules
