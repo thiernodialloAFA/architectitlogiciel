@@ -15,6 +15,10 @@ public final class DashboardDtos {
             long adrCount,
             long proposedAdrCount,
             long aiAdrCount,
+            long openProposalCount,
+            long arbitrationCount,
+            long activeStandardCount,
+            long failingCheckCount,
             Map<String, Long> risksByCategory,
             List<RiskDtos.RiskResponse> topRisks) {
     }

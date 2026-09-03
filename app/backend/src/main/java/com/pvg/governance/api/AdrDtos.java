@@ -67,6 +67,7 @@ public final class AdrDtos {
             boolean aiRelated,
             AdrSource source,
             String sourceRepoUrl,
+            String sourcePath,
             AdrRef supersedes,
             AdrRef supersededBy,
             List<LinkedRiskRef> linkedRisks,

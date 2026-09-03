@@ -13,6 +13,8 @@ public interface AdrRepository extends JpaRepository<Adr, UUID> {
 
     Optional<Adr> findByAdrNumber(int adrNumber);
 
+    Optional<Adr> findBySourceRepoUrlAndSourcePath(String sourceRepoUrl, String sourcePath);
+
     List<Adr> findByAiRelatedTrueOrderByAdrNumberAsc();
 
     List<Adr> findAllByOrderByAdrNumberAsc();

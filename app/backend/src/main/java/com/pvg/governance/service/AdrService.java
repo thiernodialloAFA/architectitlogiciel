@@ -1,6 +1,7 @@
 package com.pvg.governance.service;
 
 import com.pvg.governance.domain.Adr;
+import com.pvg.governance.domain.AdrSource;
 import com.pvg.governance.domain.AdrStatus;
 import com.pvg.governance.domain.AuditEntityType;
 import com.pvg.governance.domain.RiskEntry;
@@ -78,6 +79,7 @@ public class AdrService {
 
     public AdrResponse update(UUID id, AdrUpdateRequest request, String actor) {
         Adr adr = getOrThrow(id);
+        requirePlatformOwned(adr);
         if (TERMINAL_STATUSES.contains(adr.getStatus())) {
             throw new IllegalStateException(
                     "ADR-" + adr.getAdrNumber() + " is " + adr.getStatus() + " and can no longer be edited");
@@ -104,6 +106,7 @@ public class AdrService {
 
     public AdrResponse changeStatus(UUID id, AdrStatusChangeRequest request, String actor) {
         Adr adr = getOrThrow(id);
+        requirePlatformOwned(adr);
         AdrStatus from = adr.getStatus();
         AdrStatus to = request.status();
         if (!isAllowedTransition(from, to)) {
@@ -134,6 +137,19 @@ public class AdrService {
         };
     }
 
+    /**
+     * Repository-indexed ADRs (§3.2 option a) are read-only copies: the canonical
+     * record lives in the owning team's repository and changes arrive via re-import,
+     * never through platform editing — that would create a second source of truth.
+     */
+    private static void requirePlatformOwned(Adr adr) {
+        if (adr.getSource() == AdrSource.REPOSITORY) {
+            throw new IllegalStateException("ADR-" + adr.getAdrNumber()
+                    + " is indexed read-only from " + adr.getSourceRepoUrl()
+                    + "; edit it in the owning repository and re-import");
+        }
+    }
+
     private void linkRisks(Adr adr, List<UUID> riskIds) {
         adr.getLinkedRisks().clear();
         if (riskIds == null) {
@@ -155,7 +171,7 @@ public class AdrService {
         return new AdrResponse(adr.getId(), adr.getAdrNumber(), adr.getTitle(), adr.getStatus(),
                 adr.getContext(), adr.getDecision(), adr.getConsequences(), adr.getAlternativesConsidered(),
                 adr.getAuthor(), adr.getDepartment(), adr.getTags(), adr.isAiRelated(),
-                adr.getSource(), adr.getSourceRepoUrl(),
+                adr.getSource(), adr.getSourceRepoUrl(), adr.getSourcePath(),
                 toRef(adr.getSupersedes()), toRef(adr.getSupersededBy()),
                 adr.getLinkedRisks().stream()
                         .map(risk -> new LinkedRiskRef(risk.getId(), risk.getTitle()))
