@@ -1,9 +1,16 @@
 package com.pvg.governance.service;
 
 import com.pvg.governance.domain.AdrStatus;
+import com.pvg.governance.domain.CheckStatus;
+import com.pvg.governance.domain.ProposalStatus;
+import com.pvg.governance.domain.StandardStatus;
+import com.pvg.governance.repository.AafProposalRepository;
 import com.pvg.governance.repository.AdrRepository;
 import com.pvg.governance.repository.ApplicationEntryRepository;
+import com.pvg.governance.repository.ArbitrationRecordRepository;
+import com.pvg.governance.repository.CheckReferenceRepository;
 import com.pvg.governance.repository.RiskEntryRepository;
+import com.pvg.governance.repository.StandardRepository;
 import com.pvg.governance.domain.RiskStatus;
 import com.pvg.governance.api.DashboardDtos.DashboardSummaryResponse;
 import org.springframework.stereotype.Service;
@@ -19,15 +26,27 @@ public class DashboardService {
     private final ApplicationEntryRepository applicationRepository;
     private final RiskEntryRepository riskRepository;
     private final AdrRepository adrRepository;
+    private final AafProposalRepository proposalRepository;
+    private final ArbitrationRecordRepository arbitrationRepository;
+    private final StandardRepository standardRepository;
+    private final CheckReferenceRepository checkRepository;
     private final RiskService riskService;
 
     public DashboardService(ApplicationEntryRepository applicationRepository,
                             RiskEntryRepository riskRepository,
                             AdrRepository adrRepository,
+                            AafProposalRepository proposalRepository,
+                            ArbitrationRecordRepository arbitrationRepository,
+                            StandardRepository standardRepository,
+                            CheckReferenceRepository checkRepository,
                             RiskService riskService) {
         this.applicationRepository = applicationRepository;
         this.riskRepository = riskRepository;
         this.adrRepository = adrRepository;
+        this.proposalRepository = proposalRepository;
+        this.arbitrationRepository = arbitrationRepository;
+        this.standardRepository = standardRepository;
+        this.checkRepository = checkRepository;
         this.riskService = riskService;
     }
 
@@ -45,6 +64,10 @@ public class DashboardService {
                 adrs.size(),
                 adrs.stream().filter(adr -> adr.getStatus() == AdrStatus.PROPOSED).count(),
                 adrs.stream().filter(adr -> adr.isAiRelated()).count(),
+                proposalRepository.countByStatusNot(ProposalStatus.DECIDED),
+                arbitrationRepository.count(),
+                standardRepository.countByStatus(StandardStatus.ACTIVE),
+                checkRepository.countByLastStatus(CheckStatus.FAILING),
                 byCategory,
                 riskService.topPriority(5));
     }

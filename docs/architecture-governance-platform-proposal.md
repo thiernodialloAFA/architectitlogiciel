@@ -1,13 +1,18 @@
 # Proposal — Architecture Governance Platform (for your validation before any code is written)
 
-> **Status: v1 IMPLEMENTED.** The recommended first slice from §6 — the application
-> landscape, the architecture risk register, and ADR decision records built deeply with a
-> shared append-only audit trail and the seeded hospitality case study — is now implemented
-> in [`app/`](../app/README.md) (React + TypeScript frontend, Spring Boot/Java 21 backend,
-> PostgreSQL, Docker Compose, CI). The remaining modules (Advice Forum workflow, standards
-> library, C4 viewer, ADR repository indexing, fitness-function status integration) stay on
-> the roadmap, shown in-app, per the build order below. The §7 open questions were resolved
-> with the stated defaults. The original proposal text follows unchanged.
+> **Status: v2 IMPLEMENTED — full proposal delivered.** v1 built the recommended first
+> slice from §6 — the application landscape, the architecture risk register, and ADR
+> decision records built deeply with a shared append-only audit trail and the seeded
+> hospitality case study — in [`app/`](../app/README.md) (React + TypeScript frontend,
+> Spring Boot/Java 21 backend, PostgreSQL, Docker Compose, CI). v2 delivered the five
+> remaining modules per the build order below: the Architecture Advice Forum workflow with
+> scoped proposals and the rarely-used arbitration record (§3.3), the versioned standards &
+> reference-patterns library (§3.5), the C4 model viewer with pinned client-side Mermaid
+> rendering (§3.4), read-only ADR repository indexing per source-of-truth option (a)
+> (§3.2), and fitness-function/contract-testing status integration (§6). The app's Roadmap
+> page now tracks only production hardening (OIDC/SSO, scheduled repository pulls, live
+> CI/Pact webhooks). The §7 open questions were resolved with the stated defaults. The
+> original proposal text follows unchanged.
 
 ## 1. Why this shape
 

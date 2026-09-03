@@ -8,6 +8,14 @@ import RiskFormPage from './pages/RiskFormPage'
 import AdrListPage from './pages/AdrListPage'
 import AdrDetailPage from './pages/AdrDetailPage'
 import AdrFormPage from './pages/AdrFormPage'
+import AdrImportPage from './pages/AdrImportPage'
+import ForumPage from './pages/ForumPage'
+import SessionDetailPage from './pages/SessionDetailPage'
+import ProposalFormPage from './pages/ProposalFormPage'
+import ProposalDetailPage from './pages/ProposalDetailPage'
+import StandardsPage from './pages/StandardsPage'
+import StandardDetailPage from './pages/StandardDetailPage'
+import StandardFormPage from './pages/StandardFormPage'
 import RoadmapPage from './pages/RoadmapPage'
 
 export default function App() {
@@ -29,6 +37,9 @@ export default function App() {
           <NavLink to="/risks">Risk Register</NavLink>
           <NavLink to="/adrs">ADRs &amp; Case Law</NavLink>
           <NavLink to="/adrs-ai">AI Architecture Register</NavLink>
+          <NavLink to="/forum">Advice Forum</NavLink>
+          <NavLink to="/standards">Standards Library</NavLink>
+          <NavLink to="/adr-import">ADR Indexing</NavLink>
           <NavLink to="/roadmap">Roadmap</NavLink>
         </nav>
         <footer className="sidebar-footer">
@@ -49,6 +60,15 @@ export default function App() {
           <Route path="/adrs/new" element={<AdrFormPage />} />
           <Route path="/adrs/:id" element={<AdrDetailPage />} />
           <Route path="/adrs/:id/edit" element={<AdrFormPage />} />
+          <Route path="/adr-import" element={<AdrImportPage />} />
+          <Route path="/forum" element={<ForumPage />} />
+          <Route path="/forum/sessions/:id" element={<SessionDetailPage />} />
+          <Route path="/forum/proposals/new" element={<ProposalFormPage />} />
+          <Route path="/forum/proposals/:id" element={<ProposalDetailPage />} />
+          <Route path="/standards" element={<StandardsPage />} />
+          <Route path="/standards/new" element={<StandardFormPage />} />
+          <Route path="/standards/:id" element={<StandardDetailPage />} />
+          <Route path="/standards/:id/edit" element={<StandardFormPage />} />
           <Route path="/roadmap" element={<RoadmapPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

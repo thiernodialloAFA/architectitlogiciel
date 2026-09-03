@@ -30,12 +30,16 @@ maintain. The `app/` directory is excluded from the site: it is software, not co
   resources, a hands-on exercise, and a difficult, scenario-based validation quiz with an
   answer key.
 - **[`app/`](app/README.md)** — the **Architecture Governance Platform** (React + TypeScript
-  frontend, Spring Boot/Java 21 backend, PostgreSQL), implemented to the proposal's
-  recommended v1 scope: application landscape, architecture risk register, and ADR decision
-  case law with an append-only audit trail, seeded with the hospitality-group case study.
+  frontend, Spring Boot/Java 21 backend, PostgreSQL), implementing the full proposal:
+  application landscape, architecture risk register, ADR decision case law with an
+  append-only audit trail (v1), plus the Architecture Advice Forum workflow, standards &
+  reference-patterns library, C4 model viewer, ADR repository indexing, and
+  fitness-function/contract-test status integration (v2), seeded with the
+  hospitality-group case study.
   Run it with `cd app && docker compose up --build`; CI builds and tests it on every change.
 - **[`docs/architecture-governance-platform-proposal.md`](docs/architecture-governance-platform-proposal.md)**
   — the plan for the **Architecture Governance Platform** covering architecture governance,
   application landscape stocktake & risk register, cross-domain standards, and
-  AI-architecture advisory. Its recommended v1 slice (§6) is implemented in
-  [`app/`](app/README.md); the remaining modules are tracked on the app's Roadmap page.
+  AI-architecture advisory. Its recommended v1 slice (§6) and the follow-up v2 modules are
+  implemented in [`app/`](app/README.md); remaining production-hardening items are tracked
+  on the app's Roadmap page.

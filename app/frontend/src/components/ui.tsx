@@ -26,6 +26,30 @@ const BADGE_TONES: Record<string, string> = {
   INVEST: 'tone-blue',
   MIGRATE: 'tone-orange',
   ELIMINATE: 'tone-red',
+  // advice forum
+  SUBMITTED: 'tone-blue',
+  SCHEDULED: 'tone-orange',
+  DECIDED: 'tone-green',
+  HELD: 'tone-green',
+  TEAM: 'tone-gray',
+  DOMAIN: 'tone-blue',
+  GROUP: 'tone-purple',
+  // standards
+  DRAFT: 'tone-blue',
+  INTEGRATION: 'tone-blue',
+  API_CONVENTION: 'tone-purple',
+  AI_PATTERN: 'tone-purple',
+  SECURITY: 'tone-red',
+  DATA: 'tone-orange',
+  // checks
+  PASSING: 'tone-green',
+  FAILING: 'tone-red',
+  UNKNOWN: 'tone-gray',
+  FITNESS_FUNCTION: 'tone-blue',
+  CONTRACT_TEST: 'tone-purple',
+  // adr source
+  REPOSITORY: 'tone-orange',
+  PLATFORM: 'tone-gray',
 }
 
 export function Badge({ value }: { value: string }) {

@@ -75,6 +75,10 @@ public class Adr {
     @Column(name = "source_repo_url", columnDefinition = "text")
     private String sourceRepoUrl;
 
+    /** Repo-relative file path of an indexed ADR (§3.2 option a); import identity with sourceRepoUrl. */
+    @Column(name = "source_path", columnDefinition = "text")
+    private String sourcePath;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supersedes_id")
     private Adr supersedes;
@@ -206,6 +210,14 @@ public class Adr {
 
     public void setSourceRepoUrl(String sourceRepoUrl) {
         this.sourceRepoUrl = sourceRepoUrl;
+    }
+
+    public String getSourcePath() {
+        return sourcePath;
+    }
+
+    public void setSourcePath(String sourcePath) {
+        this.sourcePath = sourcePath;
     }
 
     public Adr getSupersedes() {

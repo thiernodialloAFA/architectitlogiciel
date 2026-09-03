@@ -39,6 +39,22 @@ export default function DashboardPage() {
                 <div className="value">{data.aiAdrCount}</div>
                 <div className="label">AI-architecture decisions</div>
               </div>
+              <div className="stat">
+                <div className="value">{data.openProposalCount}</div>
+                <div className="label">Forum proposals in flight</div>
+              </div>
+              <div className="stat">
+                <div className="value">{data.arbitrationCount}</div>
+                <div className="label">Arbitrations (should stay rare)</div>
+              </div>
+              <div className="stat">
+                <div className="value">{data.activeStandardCount}</div>
+                <div className="label">Active standards</div>
+              </div>
+              <div className={data.failingCheckCount > 0 ? 'stat alert' : 'stat'}>
+                <div className="value">{data.failingCheckCount}</div>
+                <div className="label">Failing fitness / contract checks</div>
+              </div>
             </div>
 
             <div className="card">

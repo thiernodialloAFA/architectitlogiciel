@@ -23,8 +23,9 @@ export default function AdrDetailPage() {
             actions={
               <>
                 {adr.aiRelated && <AiBadge />}
+                {adr.source === 'REPOSITORY' && <Badge value="REPOSITORY" />}
                 <Badge value={adr.status} />
-                {(adr.status === 'PROPOSED' || adr.status === 'ACCEPTED') && (
+                {(adr.status === 'PROPOSED' || adr.status === 'ACCEPTED') && adr.source !== 'REPOSITORY' && (
                   <Link className="button secondary" to={`/adrs/${adr.id}/edit`}>
                     Edit
                   </Link>
@@ -50,8 +51,9 @@ export default function AdrDetailPage() {
               )}
               {adr.source === 'REPOSITORY' && (
                 <p className="muted">
-                  Read-only import — the canonical record lives in{' '}
+                  Read-only import{adr.sourcePath ? ` of ${adr.sourcePath}` : ''} — the canonical record lives in{' '}
                   {adr.sourceRepoUrl ? <a href={adr.sourceRepoUrl}>{adr.sourceRepoUrl}</a> : 'the owning team’s repository'}.
+                  Changes are picked up on the next import.
                 </p>
               )}
             </div>
@@ -92,6 +94,11 @@ export default function AdrDetailPage() {
           <div className="card">
             <h2>Status lifecycle</h2>
             <p className="muted">Allowed transitions: Proposed → Accepted → Deprecated / Superseded.</p>
+            {adr.source === 'REPOSITORY' ? (
+              <p className="muted">
+                Status is managed in the owning repository and synchronised on import — it cannot be changed here.
+              </p>
+            ) : (
             <div className="form-actions">
               {adr.status === 'PROPOSED' && (
                 <button
@@ -140,6 +147,7 @@ export default function AdrDetailPage() {
               )}
               {changeStatus.error && <span className="error-box">{changeStatus.error.message}</span>}
             </div>
+            )}
           </div>
 
           <div className="card">
