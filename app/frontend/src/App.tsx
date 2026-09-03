@@ -1,122 +1,58 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { NavLink, Navigate, Route, Routes } from 'react-router-dom'
+import DashboardPage from './pages/DashboardPage'
+import LandscapePage from './pages/LandscapePage'
+import ApplicationDetailPage from './pages/ApplicationDetailPage'
+import RiskRegisterPage from './pages/RiskRegisterPage'
+import RiskDetailPage from './pages/RiskDetailPage'
+import RiskFormPage from './pages/RiskFormPage'
+import AdrListPage from './pages/AdrListPage'
+import AdrDetailPage from './pages/AdrDetailPage'
+import AdrFormPage from './pages/AdrFormPage'
+import RoadmapPage from './pages/RoadmapPage'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app-shell">
+      <aside className="sidebar">
+        <div className="brand">
+          <span className="brand-mark">AG</span>
+          <div>
+            <strong>Architecture Governance</strong>
+            <small>Pierre &amp; Vacances Group — demo</small>
+          </div>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        <nav>
+          <NavLink to="/" end>
+            Dashboard
+          </NavLink>
+          <NavLink to="/landscape">Application Landscape</NavLink>
+          <NavLink to="/risks">Risk Register</NavLink>
+          <NavLink to="/adrs">ADRs &amp; Case Law</NavLink>
+          <NavLink to="/adrs-ai">AI Architecture Register</NavLink>
+          <NavLink to="/roadmap">Roadmap</NavLink>
+        </nav>
+        <footer className="sidebar-footer">
+          Seeded demo data only — no production information (proposal §5).
+        </footer>
+      </aside>
+      <main className="content">
+        <Routes>
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/landscape" element={<LandscapePage />} />
+          <Route path="/landscape/:id" element={<ApplicationDetailPage />} />
+          <Route path="/risks" element={<RiskRegisterPage />} />
+          <Route path="/risks/new" element={<RiskFormPage />} />
+          <Route path="/risks/:id" element={<RiskDetailPage />} />
+          <Route path="/risks/:id/edit" element={<RiskFormPage />} />
+          <Route path="/adrs" element={<AdrListPage aiOnly={false} />} />
+          <Route path="/adrs-ai" element={<AdrListPage aiOnly={true} />} />
+          <Route path="/adrs/new" element={<AdrFormPage />} />
+          <Route path="/adrs/:id" element={<AdrDetailPage />} />
+          <Route path="/adrs/:id/edit" element={<AdrFormPage />} />
+          <Route path="/roadmap" element={<RoadmapPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+    </div>
   )
 }
-
-export default App
