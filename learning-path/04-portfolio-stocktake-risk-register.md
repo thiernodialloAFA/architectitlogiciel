@@ -47,15 +47,20 @@ prove the model works in practice:
 | Column | Purpose |
 |---|---|
 | System/Application | Unique identifier |
-| Owning department/team | Accountability |
+| Owning department/team | Accountability for the system itself |
+| Risk owner | The named individual accountable for *treating this specific risk* — not always the same person as the system owner, and the field that actually makes the register auditable rather than just descriptive |
 | Risk category | One of: technical debt / end-of-life / integration brittleness / security-compliance / AI-readiness |
 | Description | What, specifically, is wrong |
+| Current controls | What, if anything, already mitigates this today (monitoring, manual process, compensating control) — needed to assess *residual* risk, not just the raw description |
 | Impact if realised | Business consequence, not just technical |
 | Likelihood | Rough qualitative scale (Low/Med/High) — resist false-precision scoring |
+| Inherent vs. residual risk | Score both: inherent (if nothing were done) and residual (given current controls) — collapsing these into one number hides how much the existing controls are actually doing |
 | Blast radius | Team / domain / group — ties back to the governance model in Module 3 |
-| Recommended action | Tolerate / Invest / Migrate / Eliminate (TIME) or equivalent |
+| Treatment decision | Tolerate / Invest / Migrate / Eliminate (TIME) or equivalent — a decision, not just a label |
 | Cost-to-fix estimate | Rough order of magnitude, for budget-cycle conversations |
+| Target date / status | Open / In progress / Closed, with a target date for the treatment — without this the register can't distinguish "we decided to tolerate this" from "nobody has looked at this since it was logged" |
 | Review cadence | How often this entry gets re-assessed — this is what makes it "living" |
+| Last assessed / evidence | Date of last review and a pointer to the evidence behind the current score (an incident ticket, an EOL vendor notice, a pen-test finding) — a register with no evidence trail is an opinion, not a risk assessment |
 
 Then write one paragraph on how this register would be co-authored with a Group CTO and
 fed into a **multi-year roadmap** — specifically, how you'd avoid the register becoming
@@ -66,16 +71,24 @@ a static document nobody revisits after the first stocktake.
 <details>
 <summary><strong>Q1.</strong> Two systems are flagged as high risk: System A has severe technical debt (hard to change, but stable, no incidents) and System B has moderate integration brittleness but has caused three production incidents in the last quarter. A stakeholder wants to fix System A first because "the code is worse." How do you prioritise, and what's wrong with "worst code first"?</summary>
 
-Prioritise System B first, and reject "worst code first" as the ordering principle. A risk
-register's job is to prioritise by *realised or imminent business impact*, not by how
-unpleasant the code is to work in — technical debt that never surfaces as an incident is,
-by definition, currently tolerable (in TIME-model terms, a candidate for "Tolerate," not
-urgent "Invest/Migrate"), whereas System B has already demonstrated concrete, recurring
-business impact (three incidents this quarter) and a brittleness pattern strongly
-suggesting a fourth is likely. Ugly code with no external symptoms should still be tracked
-(risk register: yes; entry stays open) but ranked below anything with a demonstrated
-incident trail, because likelihood × impact — not code aesthetics — is what a register
-exists to rank. The stakeholder's instinct usually reflects legitimate frustration
+On the evidence given, System B ranks first, and "worst code first" is the wrong ordering
+principle — a risk register's job is to prioritise by *evidenced or imminent business
+impact*, not by how unpleasant the code is to work in. But be careful not to over-correct
+into an equally unsafe heuristic: "no incidents yet" does **not** mean System A's debt is
+*by definition* tolerable — debt with zero incident history can still be sitting on an
+EOL platform with a hard vendor cutoff date, blocking an already-committed roadmap item,
+or masking a security/compliance exposure that simply hasn't been triggered yet. Absence
+of incidents is evidence of lower *realised* impact so far, not proof of low risk. The
+defensible answer is conditional: rank System B first *given the stated evidence*
+(recurring, demonstrated business impact this quarter, a brittleness pattern suggesting a
+fourth incident is likely), while explicitly checking whether System A has an unstated
+forcing function — an imminent EOL date, a blocked strategic migration, a known compliance
+gap — before finalising the order. If it does, that changes the ranking regardless of
+incident count. Ugly code with no such forcing function and no incident history should
+still be tracked (risk register: yes; entry stays open) but ranked below anything with a
+demonstrated or imminent business-impact trail, because likelihood × impact — assessed
+honestly, not just by incident count — is what a register exists to rank. The
+stakeholder's instinct usually reflects legitimate frustration
 (engineers dislike touching System A) rather than a risk-based argument; separate those
 two conversations.
 </details>

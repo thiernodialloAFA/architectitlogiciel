@@ -64,13 +64,14 @@ The mistake is treating "the rule finds pre-existing violations" as a failure of
 when it's actually the tool working correctly — the codebase genuinely has 47 cycles; the
 fitness function just made an invisible problem visible. Removing the rule entirely throws
 away all future protection to avoid dealing with the past. The correct incremental-adoption
-pattern (explicitly supported by ArchUnit's `freeze()` API, and a general fitness-function
-best practice from *Building Evolutionary Architectures*) is to **freeze** the current
-violation set as a known baseline: the test passes today because it only fails on *new*
-violations beyond the frozen baseline, while existing violations are recorded (often in a
-checked-in file) as visible, trackable technical debt — ideally cross-referenced into the
-risk register from Module 4. This gets you CI protection against regression starting
-immediately, without requiring a big-bang cleanup as a precondition.
+pattern (explicitly supported by ArchUnit's `FreezingArchRule.freeze(rule)` wrapper, and a
+general fitness-function best practice from *Building Evolutionary Architectures*) is to
+**freeze** the current violation set as a known baseline: the test passes today because it
+only fails on *new* violations beyond the frozen baseline (persisted, by default, to a
+checked-in `archunit_store` properties file), while existing violations are recorded as
+visible, trackable technical debt — ideally cross-referenced into the risk register from
+Module 4. This gets you CI protection against regression starting immediately, without
+requiring a big-bang cleanup as a precondition.
 </details>
 
 <details>

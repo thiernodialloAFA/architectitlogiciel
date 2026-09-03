@@ -57,16 +57,25 @@ Design (on paper/Markdown, not just in your head) a concrete AAF operating model
 <summary><strong>Q1.</strong> A junior engineer proposes a significant cross-team integration change at the AAF. Two senior architects from other domains give strongly conflicting advice. Under Harmel-Law's model, who decides, and does the Group IT Architect need to step in?</summary>
 
 Under the advice process, decision authority stays with the proposer (the junior
-engineer), not with whoever is most senior in the room — that is the entire point of the
-model, and reversing it (letting the most senior voice win by default) recreates
-command-and-control governance under a participatory veneer. The proposer's job is to
-*seek* advice, weigh it, and still decide, remaining accountable for the outcome. The
-Group IT Architect only needs to step in if this is genuinely a **group-scope** decision
-(per the job ad's blast-radius-scoped tiers) **and** if, after the proposer has genuinely
-tried to reconcile the conflicting advice, no consensus is reachable and the decision is
-now blocking real progress — arbitration is the explicit last resort ("never as a
-default"), not a mechanism invoked just because two seniors disagreed once. First move:
-ask the proposer what they've decided and why, given the conflicting input.
+engineer) *within the scope they're actually empowered to commit to*, not with whoever is
+most senior in the room — that is the entire point of the model, and reversing it (letting
+the most senior voice win by default) recreates command-and-control governance under a
+participatory veneer. That caveat matters: the advice process decentralises *technical*
+decision-making, it does not override an organisation's existing, legitimate controls —
+budget authority, security/compliance sign-off, or commitments that bind other teams still
+sit wherever they formally sit, and a junior engineer "deciding" doesn't manufacture
+authority over spend or regulatory risk they were never delegated. Within the proposer's
+actual delegated scope, though, their job is to *seek* advice, weigh it, and still decide,
+remaining accountable for the outcome — the two senior architects' disagreement is input,
+not a vote. The Group IT Architect only needs to step in if this is genuinely a
+**group-scope** decision (per the job ad's blast-radius-scoped tiers) **and** if, after the
+proposer has genuinely tried to reconcile the conflicting advice, no consensus is
+reachable and the decision is now blocking real progress — arbitration is the explicit
+last resort ("never as a default"), not a mechanism invoked just because two seniors
+disagreed once. First move: ask the proposer what they've decided and why, given the
+conflicting input, and confirm whether anything about the proposal actually requires a
+non-negotiable sign-off (e.g., security, legal/regulatory, or a shared-platform commitment)
+that sits outside the advice process entirely.
 </details>
 
 <details>

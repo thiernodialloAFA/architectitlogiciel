@@ -23,8 +23,13 @@ By the end of this module you can:
 - **Structurizr DSL** (textual C4, versionable, renders diagrams from text):
   https://github.com/structurizr/dsl — read the language reference and the "workspace"
   examples.
-- **Mermaid C4 diagrams** (lighter-weight alternative, renders in GitHub/GitLab markdown
-  natively): https://mermaid.js.org/syntax/c4.html
+- **Mermaid C4 diagrams** (lighter-weight alternative, uses Mermaid's own C4 syntax):
+  https://mermaid.js.org/syntax/c4.html — note this renders in the Mermaid Live Editor and
+  in any tool embedding a current Mermaid.js version, but GitHub's and GitLab's *built-in*
+  Markdown Mermaid renderers have historically lagged behind Mermaid releases and have not
+  reliably supported the C4 diagram type — verify support on your actual target renderer
+  (or pin/vendor a known-good Mermaid.js version if embedding it yourself) before relying
+  on "renders natively in GitHub" as a workflow assumption.
 - **Article**: Simon Brown, "Diagrams as Code" — https://simonbrown.je/diagrams-as-code/
 - **Article**: ThoughtWorks Technology Radar entries on "Diagrams as code" (search radar
   archives) — useful for how to frame this to sceptical stakeholders.
@@ -89,18 +94,22 @@ EA-tool stewardship.
 <details>
 <summary><strong>Q3.</strong> You review a Container diagram where the author has drawn the PostgreSQL database as directly called by three different services, each owning different tables, with no ownership boundary shown. What's the C4-modelling problem here, distinct from the architectural problem?</summary>
 
-The C4-modelling problem: a single "database" container implies a single unit of
-deployment/ownership. If three services independently read/write it without an explicit
-boundary, the diagram is hiding an important architectural fact — namely that this is
-either (a) one container legitimately shared, in which case the diagram should show which
-tables/schemas each service touches (a note, or split into per-schema components), or (b)
-actually three couplings that should be redrawn as three separate database containers (or
-schemas) to make the coupling visible rather than laundering it through a single box.
-The architectural problem (shared-database integration is generally an anti-pattern
-because it creates hidden coupling and blocks independent schema evolution) is a separate,
-downstream discussion — but you can't even have that discussion until the diagram stops
-hiding it. As reviewer, the first fix is modelling honesty: make the diagram show the
-real coupling before debating whether it's acceptable.
+Careful with the framing here: a C4 **container** is a deployable/runnable unit or a data
+store, not necessarily an ownership boundary — a single shared PostgreSQL instance can be
+one legitimate container even if multiple services use it, and "split it into three
+containers" is not a valid modelling fix if there is genuinely one deployable database
+instance. The real C4-modelling problem is narrower: the diagram is currently *silent*
+about a fact that matters architecturally, namely which service touches which tables. The
+fix is to make that fact visible without inventing containers that don't exist — draw the
+explicit relationship arrows from each of the three services to the one database container
+(C4 already expects one arrow per consumer, each optionally labelled with what it's used
+for, e.g. "reads/writes `bookings` schema"), and/or add a supplementary note or a
+lower-level Component diagram of the database's schemas to show the ownership split
+without misrepresenting deployment topology. The architectural problem (shared-database
+integration is generally an anti-pattern because it creates hidden coupling and blocks
+independent schema evolution) is a separate, downstream discussion — but as reviewer, the
+first fix is modelling honesty about *relationships and usage*, not fabricating container
+boundaries that don't correspond to real deployable units.
 </details>
 
 <details>

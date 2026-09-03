@@ -5,10 +5,11 @@ role (Pierre & Vacances Group).
 
 ## Contents
 
-- **[`learning-path/`](learning-path/README.md)** — a 10-module learning path covering every
+- **[`learning-path/`](learning-path/README.md)** — a 12-module learning path covering every
   responsibility in the job description (architecture governance, application architecture
   and cross-domain coherence, application landscape stocktake and risk prioritisation, AI
-  architecture, cloud literacy, and technical advisory/leadership). Each module has curated
+  architecture, cloud literacy, security architecture, technical advisory/leadership, and
+  interview/portfolio preparation for this specific role). Each module has curated
   resources, a hands-on exercise, and a difficult, scenario-based validation quiz with an
   answer key.
 - **[`docs/architecture-governance-platform-proposal.md`](docs/architecture-governance-platform-proposal.md)**

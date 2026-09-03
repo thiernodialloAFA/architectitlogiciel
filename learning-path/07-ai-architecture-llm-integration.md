@@ -24,7 +24,9 @@
 ## Curated resources
 
 - **OWASP Top 10 for LLM Applications**: https://owasp.org/www-project-top-10-for-large-language-model-applications/
-  — the closest thing to an industry-consensus **security baseline for AI artefacts**;
+  — the most widely referenced community-maintained **security baseline for AI
+  artefacts** available today (not a formal industry standard, but the closest common
+  reference point most practitioners and auditors will expect you to know);
   read all ten risks (prompt injection, insecure output handling, training data poisoning
   is more ML-side but still worth knowing, excessive agency, etc.).
 - **Article**: Simon Willison's blog (https://simonwillison.net/) — search his posts on
@@ -41,10 +43,12 @@
   Lewis et al. paper abstract for grounding, then a current (2024+) practitioner guide on
   production RAG architecture pitfalls (chunking, retrieval quality, freshness) — search
   "production RAG architecture lessons learned."
-- **Model Context Protocol (MCP)** — https://modelcontextprotocol.io — a concrete, current
-  example of a standardised "agentic tooling" integration pattern (how applications expose
-  tools/data to LLM agents); worth understanding as a live example of the kind of
-  architectural standard the role is asked to "curate."
+- **Model Context Protocol (MCP)** — https://modelcontextprotocol.io — an open,
+  Anthropic-originated protocol (not a universally adopted standard, but with growing
+  multi-vendor support) for how applications expose tools/data to LLM agents; worth
+  understanding as a concrete, live example of the kind of "agentic tooling" integration
+  pattern and architectural standard the role is asked to "curate" — evaluate its actual
+  adoption status in your stack rather than assuming it's already the settled norm.
 - **Article**: search for recent (2024+) posts on "agent framework comparison" (e.g.,
   LangGraph, Semantic Kernel, or custom orchestration) for current landscape awareness —
   the tooling shifts fast, so prioritise sources within the last 12 months and cross-check
@@ -73,21 +77,27 @@
 <details>
 <summary><strong>Q1.</strong> A product team wants to give an LLM-based support agent a tool that can directly execute refunds up to €500 without human review, arguing "the model is very accurate in testing." As the architect reviewing this, what's your primary concern, and how do you frame it — noting the job ad's explicit line that this is "not data science or ML platform work"?</summary>
 
-The primary concern is architectural, not a model-quality/ML-accuracy question — precisely
-the boundary the job ad draws. The issue isn't "is the model accurate enough" (that's a
-data-science evaluation question outside this role's scope); it's "what blast radius does
-giving an LLM-driven agent unmediated write-access to a financial action create, and what
-architectural guardrails does the *system* need regardless of model accuracy." This maps
-directly to OWASP LLM Top 10's "Excessive Agency" risk: granting an agent an action with
-real-world, hard-to-reverse consequences (moving money) without a human-in-the-loop or a
-constrained, auditable authorization boundary is a system design failure independent of
-how well the model performs on average — it takes only one adversarial prompt-injection or
-edge-case failure to cause real financial/reputational damage, and "very accurate in
-testing" says nothing about worst-case/adversarial behaviour. The architectural fix
-(regardless of model quality): require human approval above a much lower threshold (or
-for all cases initially), log every proposed action with full context for audit, and treat
-the refund-execution tool as a privileged capability requiring its own security review,
-not a routine feature toggle.
+The primary concern is architectural, not purely a model-quality/ML-accuracy question —
+and this is a good place to be precise about the job ad's scope boundary rather than
+over-apply it: "not data science or ML platform work" means you're not the one training or
+statistically evaluating the model, but as the application architect you are still
+responsible for *specifying* what evaluation and monitoring a feature like this needs
+before its blast radius is widened — that's an architectural/governance requirement, not
+a hand-off. So the answer has two parts, not one. First, "very accurate in testing" says
+nothing about worst-case/adversarial behaviour, and this maps directly to OWASP LLM Top
+10's "Excessive Agency" risk: granting an agent an action with real-world, hard-to-reverse
+consequences (moving money) without a human-in-the-loop or a constrained, auditable
+authorization boundary is a system design failure independent of how well the model
+performs on average — it takes only one adversarial prompt-injection or edge-case failure
+to cause real financial/reputational damage. Second, before *any* increase in autonomy is
+even considered, require a risk-proportionate evaluation and monitoring plan (adversarial
+test cases, production drift monitoring, a defined rollback trigger) — you don't need to
+run that evaluation yourself, but you do need to insist it exists and gate the decision on
+it. The architectural fix: require human approval above a much lower threshold (or for all
+cases initially), log every proposed action with full context for audit, treat the
+refund-execution tool as a privileged capability requiring its own security review, and
+require the evaluation/monitoring plan above as a precondition for ever raising the
+threshold — not a routine feature toggle.
 </details>
 
 <details>
@@ -97,15 +107,22 @@ They're missing the failure mode where the retrieval step returns weak/irrelevan
 but the LLM still confidently answers anyway — a very common RAG failure that demos
 systematically hide because demo questions are cherry-picked to hit well-covered corpus
 content. Architecturally, this is a graceful-degradation gap: the system needs an explicit
-policy for "low-confidence retrieval," not just a happy-path prompt. Concretely, ask for:
-(1) a retrieval-confidence/relevance threshold below which the system says "I don't have
-enough information" rather than letting the LLM hallucinate a plausible-sounding answer
-from weak context; (2) visible source citations in every answer so a human can verify
-grounding, treated as a UX/architecture requirement, not an afterthought; (3) an evaluation
-set deliberately including out-of-corpus and adversarial questions (not just
-corpus-friendly ones) run before each release, since this is exactly the class of failure
-a cherry-picked demo won't surface. None of this requires ML expertise — it's an
-application-architecture requirement on how the system behaves under uncertainty.
+policy for "low-confidence retrieval," not just a happy-path prompt. One important
+precision: raw vector-similarity/retrieval scores are usually *not* a calibrated
+confidence measure — a high similarity score can still retrieve a passage that doesn't
+actually answer the question, and a low score doesn't always mean "no answer exists," so
+treating a similarity threshold alone as a safety control creates a false sense of
+protection. Concretely, ask for: (1) an **evaluated** answerability policy — a held-out
+test set spanning in-corpus, out-of-corpus, stale, and adversarial questions, used to tune
+and validate (not just assume) whatever threshold or heuristic decides "I don't have
+enough information" vs. answering; (2) visible source citations in every answer, *and*
+a check (even a lightweight one, e.g. an LLM-graded or rule-based entailment check) that
+the answer is actually supported by the cited passages — citations alone don't prove
+grounding, they just give a human something to verify against; (3) production monitoring
+of the abstention rate and spot-checked answer quality over time, since retrieval quality
+degrades as the corpus grows or goes stale, not just at launch. None of this requires
+ML-training expertise — it's an application-architecture requirement on how the system
+behaves under uncertainty, evaluated with real held-out data rather than a demo script.
 </details>
 
 <details>
