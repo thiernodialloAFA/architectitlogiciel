@@ -1,0 +1,48 @@
+name: App CI
+
+on:
+  push:
+    branches: ["main"]
+    paths: ["app/**", ".github/workflows/ci.yml"]
+  pull_request:
+    paths: ["app/**", ".github/workflows/ci.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend (tests + ArchUnit fitness functions)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/backend
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Build and test
+        run: mvn -B verify
+
+  frontend:
+    name: Frontend (lint + type-check + build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/frontend
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: app/frontend/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build

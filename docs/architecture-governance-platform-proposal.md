@@ -1,9 +1,13 @@
 # Proposal — Architecture Governance Platform (for your validation before any code is written)
 
-> **Status: PROPOSAL ONLY.** Per your request ("feel free to propose the plan and let me
-> validate before implementation"), nothing in this document has been built yet. This is
-> the plan to review, adjust, and approve — once you confirm scope, I'll implement in the
-> incremental order described below.
+> **Status: v1 IMPLEMENTED.** The recommended first slice from §6 — the application
+> landscape, the architecture risk register, and ADR decision records built deeply with a
+> shared append-only audit trail and the seeded hospitality case study — is now implemented
+> in [`app/`](../app/README.md) (React + TypeScript frontend, Spring Boot/Java 21 backend,
+> PostgreSQL, Docker Compose, CI). The remaining modules (Advice Forum workflow, standards
+> library, C4 viewer, ADR repository indexing, fitness-function status integration) stay on
+> the roadmap, shown in-app, per the build order below. The §7 open questions were resolved
+> with the stated defaults. The original proposal text follows unchanged.
 
 ## 1. Why this shape
 
