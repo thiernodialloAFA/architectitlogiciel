@@ -45,9 +45,12 @@ header_pages:
   - learning-path/README.md
   - docs/architecture-governance-platform-proposal.md
 
-# Keep the built site free of common non-content artefacts, if present.
+# Keep the built site free of non-content artefacts: tooling directories and
+# the governance-platform application code (published as software, not pages).
 exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
   - node_modules
+  - app
+  - .github
