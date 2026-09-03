@@ -60,6 +60,7 @@ export default function AdrListPage({ aiOnly }: { aiOnly: boolean }) {
                     {adr.title}
                   </Link>{' '}
                   {adr.aiRelated && <AiBadge />}
+                  {adr.source === 'REPOSITORY' && <Badge value="REPOSITORY" />}
                 </td>
                 <td>
                   <Badge value={adr.status} />

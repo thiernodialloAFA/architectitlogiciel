@@ -11,8 +11,24 @@ export type TreatmentDecision = 'TOLERATE' | 'INVEST' | 'MIGRATE' | 'ELIMINATE'
 export type RiskStatus = 'OPEN' | 'IN_PROGRESS' | 'MITIGATED' | 'ACCEPTED' | 'CLOSED'
 export type AdrStatus = 'PROPOSED' | 'ACCEPTED' | 'DEPRECATED' | 'SUPERSEDED'
 export type AdrSource = 'PLATFORM' | 'REPOSITORY'
-export type AuditEntityType = 'APPLICATION' | 'RISK_ENTRY' | 'ADR'
+export type AuditEntityType =
+  | 'APPLICATION'
+  | 'RISK_ENTRY'
+  | 'ADR'
+  | 'FORUM_SESSION'
+  | 'AAF_PROPOSAL'
+  | 'ARBITRATION'
+  | 'STANDARD'
+  | 'C4_DIAGRAM'
+  | 'CHECK_REFERENCE'
 export type AuditAction = 'CREATED' | 'FIELD_CHANGED' | 'STATUS_CHANGED'
+export type AafScope = 'TEAM' | 'DOMAIN' | 'GROUP'
+export type ProposalStatus = 'SUBMITTED' | 'SCHEDULED' | 'DECIDED'
+export type ForumSessionStatus = 'PLANNED' | 'HELD'
+export type StandardCategory = 'INTEGRATION' | 'API_CONVENTION' | 'AI_PATTERN' | 'SECURITY' | 'DATA'
+export type StandardStatus = 'DRAFT' | 'ACTIVE' | 'RETIRED'
+export type CheckType = 'FITNESS_FUNCTION' | 'CONTRACT_TEST'
+export type CheckStatus = 'PASSING' | 'FAILING' | 'UNKNOWN'
 
 export interface Dependency {
   id: string
@@ -123,6 +139,7 @@ export interface Adr {
   aiRelated: boolean
   source: AdrSource
   sourceRepoUrl: string | null
+  sourcePath: string | null
   supersedes: AdrRef | null
   supersededBy: AdrRef | null
   linkedRisks: LinkedRiskRef[]
@@ -174,6 +191,185 @@ export interface DashboardSummary {
   adrCount: number
   proposedAdrCount: number
   aiAdrCount: number
+  openProposalCount: number
+  arbitrationCount: number
+  activeStandardCount: number
+  failingCheckCount: number
   risksByCategory: Record<string, number>
   topRisks: Risk[]
+}
+
+export interface AdrRefLite {
+  id: string
+  adrNumber: number
+  title: string
+}
+
+export interface ApplicationRefLite {
+  id: string
+  name: string
+}
+
+export interface SessionRefLite {
+  id: string
+  sessionDate: string
+  title: string
+}
+
+export interface ForumSession {
+  id: string
+  sessionDate: string
+  title: string
+  status: ForumSessionStatus
+  notes: string | null
+  agendaSize: number
+  createdAt: string
+  updatedAt: string
+}
+
+export interface SessionCreateRequest {
+  sessionDate: string
+  title: string
+  notes: string | null
+}
+
+export interface Proposal {
+  id: string
+  title: string
+  summary: string
+  scope: AafScope
+  status: ProposalStatus
+  submittedBy: string
+  department: string | null
+  adr: AdrRefLite | null
+  application: ApplicationRefLite | null
+  session: SessionRefLite | null
+  adviceGiven: string | null
+  advisedBy: string | null
+  finalDecision: string | null
+  decidedAt: string | null
+  arbitrated: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface ProposalCreateRequest {
+  title: string
+  summary: string
+  scope: AafScope
+  submittedBy: string
+  department: string | null
+  adrId: string | null
+  applicationId: string | null
+}
+
+export interface ProposalOutcomeRequest {
+  adviceGiven: string
+  advisedBy: string
+  finalDecision: string
+  resultingAdrId: string | null
+}
+
+export interface ArbitrationRequest {
+  requestedBy: string
+  rationale: string
+  outcome: string
+  decidedBy: string
+}
+
+export interface Arbitration {
+  id: string
+  proposalId: string
+  proposalTitle: string
+  requestedBy: string
+  rationale: string
+  outcome: string
+  decidedBy: string
+  occurredAt: string
+}
+
+export interface SessionDetail {
+  session: ForumSession
+  agenda: Proposal[]
+}
+
+export interface Standard {
+  id: string
+  title: string
+  category: StandardCategory
+  status: StandardStatus
+  version: number
+  content: string
+  owner: string
+  linkedAdrs: AdrRefLite[]
+  appliedApplications: ApplicationRefLite[]
+  createdAt: string
+  updatedAt: string
+}
+
+export interface StandardRequest {
+  title: string
+  category: StandardCategory
+  content: string
+  owner: string
+  linkedAdrIds: string[]
+  appliedApplicationIds: string[]
+}
+
+export interface C4Diagram {
+  id: string
+  applicationId: string
+  version: number
+  label: string
+  source: string
+  author: string
+  createdAt: string
+}
+
+export interface C4DiagramCreateRequest {
+  label: string
+  source: string
+}
+
+export interface CheckReference {
+  id: string
+  applicationId: string
+  applicationName: string
+  name: string
+  checkType: CheckType
+  tool: string
+  link: string | null
+  description: string | null
+  lastStatus: CheckStatus
+  lastRunAt: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+export interface CheckCreateRequest {
+  name: string
+  checkType: CheckType
+  tool: string
+  link: string | null
+  description: string | null
+}
+
+export interface AdrImportRequest {
+  repoUrl: string
+  documents: { path: string; markdown: string }[]
+}
+
+export interface AdrImportResultEntry {
+  path: string
+  adrId: string
+  adrNumber: number
+  title: string
+  outcome: string
+}
+
+export interface AdrImportResponse {
+  repoUrl: string
+  created: number
+  updated: number
+  results: AdrImportResultEntry[]
 }
